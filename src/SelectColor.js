@@ -16,7 +16,6 @@ export default function SelectColor({ closeColor, mode, setPColor, setSBColor, s
     $("html").css("--add-task-text", colorArray[8]);
     $("html").css("--add-task-text-hover", colorArray[9]);
     
-    console.log(mode)
     switch(mode) {
       case 'Pomodoro':
         setPColor(colorArray);

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './index.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { getAudioPath } from './App';
 
 const AlarmSoundDropdown = ({options, rangeValueAL, setRangeValueAL}) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,10 +29,11 @@ const AlarmSoundDropdown = ({options, rangeValueAL, setRangeValueAL}) => {
       audioRef.current.currentTime = 0;
     }
   
-    audioRef.current = new Audio(`/audios/${value}.mp3`);
+    const audioPath = getAudioPath(`${value}.mp3`);
+    audioRef.current = new Audio(audioPath);
     audioRef.current.volume = rangeValueAL / 100;
     audioRef.current.play();
-
+  
     setTimeout(() => {
       if (audioRef.current) {
         audioRef.current.pause();

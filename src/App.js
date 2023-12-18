@@ -17,6 +17,10 @@ export const colors = [['Red', '#b24a49', '#ba5c5c', '#c06a6a', '#c77a7a', '#a34
 ['Brown2', '#6a3a14', '#75482b', '#804e34', '#8b5844', '#603016', '#562c15', '#75482b', '#8f7265', '#9f8a83']
 ];
 
+export function getAudioPath(filename) {
+  return process.env.PUBLIC_URL + '/audios/' + filename;
+}
+
 function App() {
   const audioRef = useRef(null);
   const [seconds, setSeconds] = useState(1500);
@@ -116,7 +120,6 @@ function App() {
 
   // useEffects to play the alarm once done
   useEffect(() => {
-
     if (seconds === 0) {
       let WNAudio = localStorage.getItem(`selectedOption_1`);
       if (WNAudio === null) {
@@ -124,8 +127,9 @@ function App() {
       } else {
         WNAudio = WNAudio.replace(/"/g, '');
       }
-
-      const audio = new Audio(`/audios/${WNAudio}.mp3`);
+  
+      const audioPath = getAudioPath(`${WNAudio}.mp3`);
+      const audio = new Audio(audioPath);
       audio.volume = rangeValueAL / 100;
   
       let playPromise = audio.play();
@@ -150,20 +154,21 @@ function App() {
   // useEffects to play the white noise
   useEffect(() => {
     let WNAudio = localStorage.getItem(`selectedOption_2`);
-      if (WNAudio === null) {
-        WNAudio = "White Noise 1"; 
-      } else {
-        WNAudio = WNAudio.replace(/"/g, '');
-      }
-
+    if (WNAudio === null) {
+      WNAudio = "White Noise 1"; 
+    } else {
+      WNAudio = WNAudio.replace(/"/g, '');
+    }
+  
     if (audioRef.current) {
       audioRef.current.pause();
     }
-
-    audioRef.current = new Audio(`/audios/${WNAudio}.mp3`);
+  
+    const audioPath = getAudioPath(`${WNAudio}.mp3`);
+    audioRef.current = new Audio(audioPath);
     audioRef.current.volume = rangeValue / 100;
     audioRef.current.loop = true;
-
+  
     if (isChecked && isRunning) {
       let playPromise = audioRef.current.play();
   
@@ -171,7 +176,8 @@ function App() {
         playPromise.then(_ => {
         }).catch(error => {
         });
-      }}
+      }
+    }
   }, [isChecked, isRunning, rangeValue]);
 
 
@@ -195,7 +201,8 @@ function App() {
 
   // function to toggle the timer + clicking sound + favicon change
   function toggleTimer() {
-    const audioClick = new Audio(isRunning ? '/audios/click-3.mp3' : '/audios/click-2.mp3');
+    const audioClickPath = getAudioPath(isRunning ? 'click-3.mp3' : 'click-2.mp3');
+    const audioClick = new Audio(audioClickPath);
     const iconHref = isRunning ? 'fire-pause.png' : 'fire.png';
     setIsRunning(!isRunning);
     $('.time-button').toggleClass('time-button-active');

@@ -38,13 +38,13 @@ export default function Settings({ setIsChecked, rangeValue, setRangeValue, rang
                 <div className="edit-timer-container">
                   <div className="edit-timer-text">Pomodoro</div>
                   <div className="edit-timer-input">
-                    <input value={pomodoroSeconds / 60} onChange={(event)=>{const value = Math.min(Math.max(event.target.value, 0.05), 50);setPomodoroSeconds(value * 60)}} type="number" min="5" max='50' step="1" />
+                    <input value={pomodoroSeconds / 60} onChange={(event)=>{const value = Math.min(Math.max(event.target.value, 10), 50);setPomodoroSeconds(value * 60)}} type="number" min="5" max='50' step="1" />
                   </div>
                 </div>
                 <div className="edit-timer-container">
                   <div className="edit-timer-text">Short Break</div>
                   <div className="edit-timer-input">
-                     <input value={shortBreakSeconds / 60} onChange={(event)=>{const value = Math.min(Math.max(event.target.value, 0.05), 15);setShortBreakSeconds(value * 60)}} type="number" min="3" max='15' step="1" />
+                     <input value={shortBreakSeconds / 60} onChange={(event)=>{const value = Math.min(Math.max(event.target.value, 3), 15);setShortBreakSeconds(value * 60)}} type="number" min="3" max='15' step="1" />
 
                   </div>
                 </div>

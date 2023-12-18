@@ -6,6 +6,7 @@ import { getAudioPath } from './App';
 
 const AlarmSoundDropdown = ({options, rangeValueAL, setRangeValueAL}) => {
   const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef(null);
 
   const [selectedOption, setSelectedOption] = useState(() => {
     const savedOption = localStorage.getItem(`selectedOption_1`);
@@ -16,6 +17,19 @@ const AlarmSoundDropdown = ({options, rangeValueAL, setRangeValueAL}) => {
     localStorage.setItem(`selectedOption_1`, JSON.stringify(selectedOption));
   }, [selectedOption]);
 
+  useEffect(() => {
+    const onBodyClick = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.body.addEventListener("click", onBodyClick);
+
+    return () => {
+      document.body.removeEventListener("click", onBodyClick);
+    };
+  }, []);
 
   const toggling = () => setIsOpen(!isOpen);
 
@@ -49,7 +63,6 @@ const AlarmSoundDropdown = ({options, rangeValueAL, setRangeValueAL}) => {
     }}
 
     useEffect(() => {
-      // Pause the audio when the settings page unmounts
       return () => {
         if (audioRef.current) {
           audioRef.current.pause();
@@ -60,7 +73,7 @@ const AlarmSoundDropdown = ({options, rangeValueAL, setRangeValueAL}) => {
 
 
   return (
-    <div className="alarm-dropdown">
+    <div ref={ref} className="alarm-dropdown">
       <div className="alarm-dropdown-header" onClick={toggling}>
         {selectedOption } <FontAwesomeIcon icon={faCaretDown} />
       </div>

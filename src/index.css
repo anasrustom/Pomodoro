@@ -921,7 +921,15 @@ user-select: none;
   font-weight: 500;
   transition: 0.3s ease-in-out;
   padding: 0 15px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: center;
+}
 
+.task p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  width: 80%;
 }
 
 .completed p {

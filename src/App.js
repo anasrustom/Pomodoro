@@ -305,7 +305,7 @@ function App() {
       <div className="main_container">
 
         <div className="header">
-          <div className="header-text">Pomodoro</div>
+          <div className="header-text">Pomodoro AR</div>
           <div className="header-text settings" onClick={openSettings}><FontAwesomeIcon className="faGear" icon={faGear} /> Settings</div></div>
 
         <div className="time">

@@ -17,7 +17,7 @@ export default function TaskList() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
 
-const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editingTaskId, setEditingTaskId] = useState(null);
 
   const addTask = (task) => {
     const taskWithId = { ...task, id: uuidv4() };
@@ -65,47 +65,53 @@ const [editingTaskId, setEditingTaskId] = useState(null);
   )
 }
 
-  
-  const Task = ({ task, onUpdateTask, deleteTask, isEditing, setIsEditing }) => {
-    const [editedText, setEditedText] = useState(task.text);
-    const handleSave = () => {
-      if (editedText.length > 0 && editedText.length <= 65) {
-        onUpdateTask({ ...task, text: editedText });
-        setIsEditing(false);
-      }
-    };
+const Task = ({ task, onUpdateTask, deleteTask, isEditing, setIsEditing }) => {
+  const [editedText, setEditedText] = useState(task.text);
 
-    const handleCancel = () => {
+  const handleSave = () => {
+    if (editedText.length > 0 && editedText.length <= 65) {
+      onUpdateTask({ ...task, text: editedText });
       setIsEditing(false);
-      setEditedText(task.text);
+    } else if (editedText.length > 65) {
+      alert('Character limit exceeded');
     }
-    const handleDelete = () => {
-      deleteTask(task);}
-    
+  };
 
-    const textareaRef = useRef(null);
+  const handleCancel = () => {
+    setIsEditing(false);
+    setEditedText(task.text);
+  }
 
-    useEffect(() => {
-      if (isEditing) {
-        const textarea = textareaRef.current;
-        textarea.focus();
-        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-      }
-    }, [isEditing]);
-    return (
-      <div className={`task ${task.isCompleted ? 'completed' : ''}`}>
-        <input className='task-checkbox' type="checkbox" checked={task.isCompleted} onChange={() => onUpdateTask({ ...task, isCompleted: !task.isCompleted })} />
-        {!isEditing && (<p>{task.text}</p>)}
-        {isEditing && (
-          <div className='addt-page'>
-            <textarea ref={textareaRef} type="text" value={editedText} onChange={(e) => setEditedText(e.target.value)} />
-            <div className='addt-buttons'>
+  const handleDelete = () => {
+    deleteTask(task);
+  }
+
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      const textarea = textareaRef.current;
+      textarea.focus();
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    }
+  }, [isEditing]);
+  console.log(isEditing)
+
+  return (
+    <div className={`task ${task.isCompleted ? 'completed' : ''}`}>
+      <input className='task-checkbox' type="checkbox" checked={task.isCompleted} onChange={() => onUpdateTask({ ...task, isCompleted: !task.isCompleted })} />
+      {!isEditing && (<p>{task.text}</p>)}
+      {isEditing && (
+        <div className='addt-page'>
+          <textarea ref={textareaRef} type="text" value={editedText} onChange={(e) => setEditedText(e.target.value)} />
+          <div className='addt-buttons'>
             <div className="cancel-button delete" onClick={handleDelete}>Delete</div>
             <div className="cancel-button" onClick={handleCancel}>Cancel</div>
             <div className="save-button" onClick={handleSave}>Save</div>
-          </div></div>)}
-
-          <div onClick={() => setIsEditing(task.id)} className="task-edit-button">⋮</div>
-      </div>
-    );
-  };
+          </div>
+        </div>
+      )}
+      <div onClick={() => setIsEditing(task.id)} className="task-edit-button">⋮</div>
+    </div>
+  );
+};

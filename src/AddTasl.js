@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons'
 import $ from 'jquery';
@@ -6,6 +6,7 @@ import $ from 'jquery';
 export default function AddTasl( { onAddTask}) {
 const [isOpen, setIsOpen] = useState(false);
 const [taskText, setTaskText] = useState('');
+const ref = useRef(null);
 
 useEffect(() => { 
     if (isOpen) {
@@ -18,11 +19,14 @@ useEffect(() => {
 , [isOpen]);
 
 const handleSave = () => {
-    if (taskText.length > 0 && taskText.length <= 50) {
+    if (taskText.length > 0 && taskText.length <= 65) {
     onAddTask({ text: taskText, isCompleted: false });
     setTaskText('');
     setIsOpen(false);
     }
+    else if (taskText.length > 65) {
+        alert('Character limit exceeded');
+      }
 };
 
 const handleCancel = () => {
@@ -33,8 +37,22 @@ const handleCancel = () => {
 const handleOpen = () => {
     setIsOpen(true);
 }
+
+useEffect(() => {
+    const onBodyClick = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.body.addEventListener("click", onBodyClick);
+
+    return () => {
+      document.body.removeEventListener("click", onBodyClick);
+    };
+  }, []);
 return (
-    <div>
+    <div ref={ref}>
 
     {isOpen && (
     <div>

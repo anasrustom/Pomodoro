@@ -9,6 +9,7 @@ import $ from 'jquery';
 export default function Settings({ setIsChecked, rangeValue, setRangeValue, rangeValueAL, setRangeValueAL, setIsSettingsOpen, setPomodoroSeconds, setShortBreakSeconds, setLongBreakSeconds, pomodoroSeconds, shortBreakSeconds, longBreakSeconds, setPColor, setSBColor, setLBColor, PColor, SBColor, LBColor }) {
   const [isColorOpen, setIsColorOpen] = useState(false);
   const [selectedMode, setSelectedMode] = useState('');
+
   function openColor(mode) {
     setIsColorOpen(true);
     setSelectedMode(mode);
@@ -17,6 +18,8 @@ export default function Settings({ setIsChecked, rangeValue, setRangeValue, rang
     setIsColorOpen(false);
     setIsSettingsOpen(false);
   }
+
+
   return (
     <div>
       {isColorOpen && (

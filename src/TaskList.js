@@ -95,7 +95,6 @@ const Task = ({ task, onUpdateTask, deleteTask, isEditing, setIsEditing }) => {
       textarea.setSelectionRange(textarea.value.length, textarea.value.length);
     }
   }, [isEditing]);
-  console.log(isEditing)
 
   return (
     <div className={`task ${task.isCompleted ? 'completed' : ''}`}>

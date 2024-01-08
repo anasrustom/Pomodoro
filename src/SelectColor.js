@@ -58,4 +58,4 @@ export default function SelectColor({ closeColor, mode, setPColor, setSBColor, s
   )
 }
 
-export const possible = ['sama','sama','sama','sama','sama','sama','sama', 'ya ghalyeh', 'ya shatoorti', 'ya 2ameerti', 'samsoomti', 'ya 2amar'];
+export const possible = ['sama', 'why?'];

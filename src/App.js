@@ -193,9 +193,6 @@ function App() {
   function handleInputChange(event) {setInputValue(event.target.value);}
   function handleSubmit() {
     if (!inputValue) {setName('');return;}
-    if (inputValue.toLowerCase() === 'sama') {
-      const randomIndex = Math.floor(Math.random() * possible.length);
-      setName(possible[randomIndex]);return;}
     setName(inputValue);}
   function handleCheckboxChange(event) {if (isRunning) setIsChecked(event.target.checked);}
 

@@ -41,11 +41,14 @@ function App() {
   let localPomodoroSeconds = JSON.parse(localStorage.getItem('POMODORO_SECONDS')) || defaultTimes[0];
   let localShortBreakSeconds = JSON.parse(localStorage.getItem('SHORT_BREAK_SECONDS')) || defaultTimes[1];
   let localLongBreakSeconds = JSON.parse(localStorage.getItem('LONG_BREAK_SECONDS')) || defaultTimes[2];
-  
+  let localTotalSeconds = JSON.parse(localStorage.getItem('TOTAL_SECONDS')) || 0;
+
   let localRangeValueAL = JSON.parse(localStorage.getItem('rangeValueAL')) || 50;
   let localRangeValue = JSON.parse(localStorage.getItem('rangeValue')) || 25;
 
   let localName = JSON.parse(localStorage.getItem('name')) || '';
+
+
 
   const [PColor, setPColor] = useState(localPColor);
   const [SBColor, setSBColor] = useState(localSBColor);
@@ -54,6 +57,7 @@ function App() {
   const [pomodoroSeconds, setPomodoroSeconds] = useState(localPomodoroSeconds);
   const [shortBreakSeconds, setShortBreakSeconds] = useState(localShortBreakSeconds);
   const [longBreakSeconds, setLongBreakSeconds] = useState(localLongBreakSeconds);
+  const [totalSeconds, setTotalSeconds] = useState(localTotalSeconds);
 
   const [rangeValueAL, setRangeValueAL] = useState(localRangeValueAL);
   const [rangeValue, setRangeValue] = useState(localRangeValue);
@@ -69,6 +73,7 @@ function App() {
   useEffect(() => {localStorage.setItem('rangeValueAL', JSON.stringify(rangeValueAL));}, [rangeValueAL]);
   useEffect(() => {localStorage.setItem('rangeValue', JSON.stringify(rangeValue));}, [rangeValue]);
   useEffect(() => {localStorage.setItem('name', JSON.stringify(name));}, [name]);
+  useEffect(() => {localStorage.setItem('TOTAL_SECONDS', JSON.stringify(totalSeconds));}, [totalSeconds]);
 
 
   const minutes = Math.floor(seconds / 60);
@@ -85,20 +90,28 @@ function App() {
 
   // useEffect for the timer going down
   useEffect(() => {
+    let startTime;
     if (seconds > 0 && isRunning) {
-      const endTime = Date.now() + seconds * 1000;
+      startTime = Date.now();
       const timerId = setInterval(() => {
-        const remainingTime = Math.round((endTime - Date.now()) / 1000);
-        if (remainingTime <= 0) {
+        const elapsedSeconds = Math.round((Date.now() - startTime) / 1000);
+        const remainingSeconds = seconds - elapsedSeconds;
+        if (remainingSeconds <= 0) {
           clearInterval(timerId);
           setSeconds(0);
+          if (mode === 'pomodoro') {
+            setTotalSeconds(prevTotalSeconds => prevTotalSeconds + seconds);
+          }
         } else {
-          setSeconds(remainingTime);
+          setSeconds(remainingSeconds);
+          if (mode === 'pomodoro') {
+            setTotalSeconds(prevTotalSeconds => prevTotalSeconds + elapsedSeconds);
+          }
         }
       }, 1000);
       return () => clearInterval(timerId);
     }
-  }, [seconds, isRunning]);
+  }, [seconds, isRunning, mode]);
   
   // useEffect to update the seconds on the screen + the title
   useEffect(() => {
@@ -289,6 +302,13 @@ function App() {
     }
   }, [mode, pomodoroSeconds, shortBreakSeconds, longBreakSeconds, PColor, SBColor, LBColor]);
 
+  function formatTime(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+  
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
   function openSettings() {setIsSettingsOpen(true)}
 
 
@@ -339,6 +359,9 @@ function App() {
        <p>{mode === 'pomodoro' ? `Time to focus ${name}` : `Take a break ${name}`}</p>
 
     </div>
+    <div className='total-time'>
+  <p>Total time studied: <span className='total-seconds'>{formatTime(totalSeconds)}</span> </p>
+</div>
           
       </div>
       <div className='tasklist-container'>

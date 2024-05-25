@@ -137,7 +137,6 @@ body {
   margin: 0 auto;
   min-width: 620px;
   width: 40%;
-
   height: auto;
   display: flex;
   flex-direction: column;
@@ -145,6 +144,7 @@ body {
 
 .time {
   width: 77%;
+  max-width: 510px;
   height: 310px;
   border-radius: 9px;
   background-color: var(--secondary-color);
@@ -742,7 +742,7 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-.time-for-container {
+.time-for-container, .total-time {
   position: relative;
   width: 77%;
   margin: 0px auto;
@@ -751,6 +751,11 @@ color: white;
 font-size: 1.50rem;
 height: 50px;
 
+}
+
+.total-seconds {
+  color: #f8ea99;
+  /* color: #B0E0E6; */
 }
 
 
